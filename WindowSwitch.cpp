@@ -101,7 +101,7 @@ int WinMainCRTStartup(void)
 #endif
 
 			if (current_wnd != NULL)
-				SetForegroundWindow(current_wnd);
+				SetForegroundWindow(GetLastActivePopup(current_wnd));
 		}
 	}
 	UnregisterHotKey(NULL, 0);
