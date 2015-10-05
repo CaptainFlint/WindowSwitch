@@ -29,7 +29,7 @@ void format_hex(T arg_t)
 
 int WinMainCRTStartup(void)
 {
-	if (!RegisterHotKey(NULL, 0, MOD_CONTROL | MOD_SHIFT | MOD_ALT, 'Z'))
+	if (!RegisterHotKey(NULL, 0, 0, VK_F13))
 		return 1;
 
 	MSG msg = {0};
