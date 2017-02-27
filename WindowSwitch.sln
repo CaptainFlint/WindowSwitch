@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowSwitch", "WindowSwitch.vcxproj", "{943E663A-327F-44DE-954C-6723104AF218}"
 EndProject
@@ -11,6 +11,8 @@ Global
 		Debug|x64 = Debug|x64
 		Release|Win32 = Release|Win32
 		Release|x64 = Release|x64
+		Release-sym|Win32 = Release-sym|Win32
+		Release-sym|x64 = Release-sym|x64
 		Description = 
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
@@ -22,6 +24,10 @@ Global
 		{943E663A-327F-44DE-954C-6723104AF218}.Release|Win32.Build.0 = Release|Win32
 		{943E663A-327F-44DE-954C-6723104AF218}.Release|x64.ActiveCfg = Release|x64
 		{943E663A-327F-44DE-954C-6723104AF218}.Release|x64.Build.0 = Release|x64
+		{943E663A-327F-44DE-954C-6723104AF218}.Release-sym|Win32.ActiveCfg = Release-sym|Win32
+		{943E663A-327F-44DE-954C-6723104AF218}.Release-sym|Win32.Build.0 = Release-sym|Win32
+		{943E663A-327F-44DE-954C-6723104AF218}.Release-sym|x64.ActiveCfg = Release-sym|x64
+		{943E663A-327F-44DE-954C-6723104AF218}.Release-sym|x64.Build.0 = Release-sym|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
