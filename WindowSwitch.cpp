@@ -43,8 +43,12 @@ int WinMainCRTStartup(void)
 
 #ifdef LOGGING
 			DWORD w;
-			HANDLE f = CreateFile(L"E:\\Temp\\ws.log", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+			HANDLE f = CreateFile(L"D:\\Temp\\ws.log", GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 			if (f == INVALID_HANDLE_VALUE)
+				return 1;
+			LARGE_INTEGER fpos, newpos;
+			newpos.QuadPart = 0;
+			if (!SetFilePointerEx(f, newpos, &fpos, FILE_END))
 				return 1;
 #endif
 
@@ -57,6 +61,7 @@ int WinMainCRTStartup(void)
 			} while ((owner != NULL) && IsWindowVisible(owner));
 
 			// Find next window in Z-stack to switch to
+			wchar_t wndcls[MAX_PATH];
 			do {
 				current_wnd = GetNextWindow(current_wnd, GW_HWNDNEXT);
 				if (current_wnd == NULL)
@@ -65,7 +70,10 @@ int WinMainCRTStartup(void)
 				// Skip all windows that:
 				// a) are invisible, or
 				// b) have extended style WS_EX_TOOLWINDOW set, or
-				// c) have existing and visible owner window.
+				// c) have existing and visible owner window,or
+				// d) is an IME window.
+				if (RealGetWindowClass(current_wnd, wndcls, MAX_PATH) == 0)
+					wndcls[0] = L'\0';
 
 #ifdef LOGGING
 				BOOL v = IsWindowVisible(current_wnd);
@@ -76,6 +84,10 @@ int WinMainCRTStartup(void)
 					WriteFile(f, "next_wnd:", 9, &w, NULL);
 					format_hex(current_wnd);
 					WriteFile(f, res, SZ, &w, NULL);
+					char wndclsa[MAX_PATH];
+					RealGetWindowClassA(current_wnd, wndclsa, MAX_PATH);
+					WriteFile(f, ", C:", 4, &w, NULL);
+					WriteFile(f, wndclsa, strlen(wndclsa), &w, NULL);
 					WriteFile(f, ", V:", 4, &w, NULL);
 					WriteFile(f, (v ? "1 " : "0 "), 2, &w, NULL);
 					WriteFile(f, ", T:", 4, &w, NULL);
@@ -91,12 +103,14 @@ int WinMainCRTStartup(void)
 
 			} while (!IsWindowVisible(current_wnd) ||
 			         ((GetWindowLongPtr(current_wnd, GWL_EXSTYLE) & WS_EX_TOOLWINDOW) != 0) ||
-			         ((owner != NULL) && IsWindowVisible(owner)));
+			         ((owner != NULL) && IsWindowVisible(owner)) ||
+					 (wcscmp(wndcls, L"IME") == 0));
 
 #ifdef LOGGING
 			WriteFile(f, "\x0d\x0aResult:", 9, &w, NULL);
 			format_hex(current_wnd);
 			WriteFile(f, res, SZ, &w, NULL);
+			WriteFile(f, "\x0d\x0a\x0d\x0a", 4, &w, NULL);
 			CloseHandle(f);
 #endif
 
